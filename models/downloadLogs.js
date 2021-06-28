@@ -8,7 +8,8 @@ const dlLogsSchema = new Schema({
     type : String,
     name : String,
     version : String,
-    time : String
+    date : String,
+    heure: String
 });
 
 module.exports = mongoose.model('dlLogs', dlLogsSchema)

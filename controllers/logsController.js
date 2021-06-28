@@ -80,35 +80,18 @@ const postComponentsLogsController = async (req, res) => {
         var HH = today.getHours();
         var MM = today.getMinutes();
         var SS = today.getSeconds();
-        if(dd<10) 
-        {
-            dd='0'+dd;
-        }    
-    
-        if(mm<10) 
-        {
-            mm='0'+mm;
-        } 
-    
-        if(HH<10) 
-        {
-            HH='0'+HH;
-        } 
-    
-        if(MM<10) 
-        {
-            MM='0'+MM;
-        } 
-    
-        if(SS<10) 
-        {
-            SS='0'+SS;
-        } 
-        today = dd+'/'+mm+'/'+yyyy+'-'+HH+':'+MM+':'+SS;
+        if(dd<10) {dd='0'+dd;}    
+        if(mm<10) {mm='0'+mm;} 
+        if(HH<10) {HH='0'+HH;} 
+        if(MM<10) {MM='0'+MM;} 
+        if(SS<10) {SS='0'+SS;} 
+        tDate = dd+'/'+mm+'/'+yyyy;
+        tHeure = HH+':'+MM+':'+SS;
     
         //Create new connection log
         const log = new dlLogs({
-            time: today,
+            date: tDate,
+            heure: tHeure,
             idUser: req.body.idUser,
             name: req.body.name,
             version: req.body.version,
