@@ -1,25 +1,25 @@
 //Load table models
 const { date } = require('@hapi/joi');
 const Components = require('../models/components')
-
+const mongoose = require('mongoose')
 //Load validation models
 const {postComponentsValidation} = require('../validations/logsValidation')
 
 
 const postComponentsController = async (req, res) => { 
         //Check if data format is OK
+        console.log(req.body)
         const { error } = postComponentsValidation(req.body);
-        if (error) return res.status(200).send(error.details[0].message)
-    
-    
+        console.log(error)
+        if (error) return res.status(400).send(error.details[0].message)
         //Create new connection log
         const comp = new Components({
             name: req.body.name,
             type: req.body.type,
             version: req.body.version,
             description : req.body.description,
-            git : req.body.git,
-            doc: req.body.doc
+            git : req.body.downloadLink,
+            doc: req.body.documentationLink
             
         });
         await comp.save();
@@ -27,8 +27,9 @@ const postComponentsController = async (req, res) => {
         //Send response 
         res.status(200).send(`Created`)
 };
+
 const getComponentsController = async (req, res) => { 
-    const getComp = await Components.find({ name: req.params.id}).exec();
+    const getComp = await Components.find().exec();
     res.status(200).send(getComp)
 };
 const putComponentsController = async (req, res) => { 
@@ -39,7 +40,13 @@ const putComponentsController = async (req, res) => {
     res.status(200).send("Update")
 };
 const deleteComponentsController = async (req, res) => { 
-    const deleteComp = await Components.deleteMany({ name: req.params.id}).exec();
+    try {
+    const deleteComp = await Components.deleteMany({ _id: mongoose.Types.ObjectId(req.params.id)})
+    .exec()
+
+    } catch(err) {
+        console.log(err)
+    }
     res.status(200).send("Supprimé")
 };
 

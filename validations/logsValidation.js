@@ -25,12 +25,13 @@ const postComponentsLogsValidation = (data) => {
 //create component
 const postComponentsValidation = (data) => {
     const schema = Joi.object({ 
+        id : Joi.number().optional().allow('').allow(null),
         name : Joi.string()  .min(1) .required(),
         type: Joi.string()  .min(1) .required(),
         version : Joi.string()  .min(1) .required(),
         description : Joi.string()  .min(1),
-        git : Joi.string()  .min(1),
-        doc: Joi.string()  .min(1)
+        downloadLink : Joi.string()  .min(1),
+        documentationLink: Joi.string()  .min(1)
     });       
     return schema.validate(data)
 }
