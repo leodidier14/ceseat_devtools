@@ -10,6 +10,14 @@ mongoose.connect(process.env.DB_MONGO_CONNECT, {useNewUrlParser: true}, () =>
     console.log("connected to database")
 );
 
+//######### Display name and version ############// 
+const apiinf = require('./models/apiinfo')
+var pjson = require('./package.json');
+console.log("name : " + pjson.name);
+console.log("version : " + pjson.version);
+const apiinfos = apiinf.findOneAndUpdate({name: pjson.name}, {version : pjson.version}, {upsert: true}).exec()
+//################################################//
+
 //Import routes
 const authRoute = require('./routes/routes')
 
