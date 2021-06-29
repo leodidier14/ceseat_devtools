@@ -12,7 +12,7 @@ const postConnectionValidation = (data) => {
 }
 
 //Register validation
-const postComponentsValidation = (data) => {
+const postComponentsLogsValidation = (data) => {
     const schema = Joi.object({ 
         idUser: Joi.string()  .min(1) .required(),
         name : Joi.string()  .min(1) .required(),
@@ -22,6 +22,20 @@ const postComponentsValidation = (data) => {
     return schema.validate(data)
 }
 
+//create component
+const postComponentsValidation = (data) => {
+    const schema = Joi.object({ 
+        name : Joi.string()  .min(1) .required(),
+        type: Joi.string()  .min(1) .required(),
+        version : Joi.string()  .min(1) .required(),
+        description : Joi.string()  .min(1),
+        git : Joi.string()  .min(1),
+        doc: Joi.string()  .min(1)
+    });       
+    return schema.validate(data)
+}
+
 module.exports.postConnectionValidation = postConnectionValidation;
+module.exports.postComponentsLogsValidation = postComponentsLogsValidation;
 module.exports.postComponentsValidation = postComponentsValidation;
 

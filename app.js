@@ -15,7 +15,7 @@ const apiinf = require('./models/apiinfo')
 var pjson = require('./package.json');
 console.log("name : " + pjson.name);
 console.log("version : " + pjson.version);
-const apiinfos = apiinf.findOneAndUpdate({name: pjson.name}, {version : pjson.version}, {upsert: true}).exec()
+const apiinfos = apiinf.findOneAndUpdate({name: pjson.name, port: process.env.PORT}, {version : pjson.version}, {upsert: true}).exec()
 //################################################//
 
 //Import routes
@@ -25,5 +25,5 @@ const authRoute = require('./routes/routes')
 app.use('/api/devtools', authRoute)
 
 //Running server and listening on port 3000
-const PORT = 3006
+const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`Serveur running on port ${PORT}`))

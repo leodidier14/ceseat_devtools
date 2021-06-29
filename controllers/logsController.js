@@ -4,7 +4,7 @@ const Logs = require('../models/logs')
 const dlLogs = require('../models/downloadLogs')
 
 //Load validation models
-const {postConnectionValidation, postComponentsValidation} = require('../validations/logsValidation')
+const {postConnectionValidation, postComponentsLogsValidation} = require('../validations/logsValidation')
 
 const postConnectionLogsController = async (req, res) => { 
     //Check if data format is OK
@@ -70,7 +70,7 @@ const deleteConnectionLogsController = async (req, res) => {
 
 const postComponentsLogsController = async (req, res) => { 
         //Check if data format is OK
-        const { error } = postComponentsValidation(req.body);
+        const { error } = postComponentsLogsValidation(req.body);
         if (error) return res.status(200).send(error.details[0].message)
     
         var today = new Date();
