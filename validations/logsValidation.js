@@ -25,7 +25,7 @@ const postComponentsLogsValidation = (data) => {
 //create component
 const postComponentsValidation = (data) => {
     const schema = Joi.object({ 
-        id : Joi.number().optional().allow('').allow(null),
+        _id : Joi.number().optional().allow('').allow(null),
         name : Joi.string()  .min(1) .required(),
         type: Joi.string()  .min(1) .required(),
         version : Joi.string()  .min(1) .required(),

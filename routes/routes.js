@@ -13,7 +13,7 @@ router.use(express.json());
 const {verifTokenAppController} = require('../controllers/tokenAppController')
 
 //Connection Logs
-router.get('/connection/logs', async function(req, res){
+router.get('/logs/connection', async function(req, res){
     const tokenapp = req.headers['tokenapp'];
     checkTokenApp = await verifTokenAppController(tokenapp)
     if (checkTokenApp == null) return res.status(200).send("La requête ne peux venir que de la gateway")
@@ -47,7 +47,6 @@ router.get('/components/', async function(req, res){
     const tokenapp = req.headers['tokenapp'];
     checkTokenApp = await verifTokenAppController(tokenapp)
     if (checkTokenApp == null) return res.status(200).send("La requête ne peux venir que de la gateway")
-
     getComponentsController(req, res)
 });
 router.delete('/components/:id', async function(req, res){
