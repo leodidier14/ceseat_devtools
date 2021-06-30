@@ -8,7 +8,7 @@ const {postComponentsValidation} = require('../validations/logsValidation')
 
 const postComponentsController = async (req, res) => { 
         //Check if data format is OK
-        console.log(req.body)
+        console.log('pas ici')
         const { error } = postComponentsValidation(req.body);
         console.log(error)
         if (error) return res.status(400).send(error.details[0].message)

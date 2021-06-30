@@ -6,10 +6,6 @@ const dlLogs = require('../models/downloadLogs')
 //Load validation models
 const { postComponentsLogsValidation} = require('../validations/logsValidation')
 
-const getSingleConnectionLogsController = async (req, res) => { 
-    const connectionLogs = await Logs.find({ idUser: req.params.id}).exec();
-    res.status(200).send(connectionLogs)
-};
 const getMultipleConnectionLogsController = async (req, res) => { 
     console.log('getMultipleConnectionLogsController')
 
@@ -17,15 +13,14 @@ const getMultipleConnectionLogsController = async (req, res) => {
     console.log(connectionLogs)
     res.status(200).send(connectionLogs)
 };
-const deleteConnectionLogsController = async (req, res) => { 
-    const connectionLogs = await Logs.deleteMany({ idUser: req.params.id}).exec();
-    res.status(200).send("Supprimé")
-};
+
 
 const postComponentsLogsController = async (req, res) => { 
         //Check if data format is OK
-        const { error } = postComponentsLogsValidation(req.body);
-        if (error) return res.status(200).send(error.details[0].message)
+        console.log(req.body)
+        /*const { error } = postComponentsLogsValidation(req.body);
+        console.log(error)
+        if (error) return res.status(200).send(error.details[0].message)*/
     
         var today = new Date();
         var dd = today.getDate();
@@ -46,7 +41,7 @@ const postComponentsLogsController = async (req, res) => {
         const log = new dlLogs({
             date: tDate,
             heure: tHeure,
-            idUser: req.body.idUser,
+            idUser: req.body.userId,
             name: req.body.name,
             version: req.body.version,
             type: req.body.type
@@ -56,24 +51,12 @@ const postComponentsLogsController = async (req, res) => {
         //Send response 
         res.status(200).send(`Added to logs`)
 };
-const getSingleComponentsLogsController = async (req, res) => { 
-    const connectionLogs = await dlLogs.find({ name: req.params.id}).exec();
-    res.status(200).send(connectionLogs)
-};
 const getMultipleComponentsLogsController = async (req, res) => { 
     const connectionLogs = await dlLogs.find().exec();
     res.status(200).send(connectionLogs)
 };
-const deleteComponentsLogsController = async (req, res) => { 
-    const connectionLogs = await dlLogs.deleteMany({ name: req.params.id}).exec();
-    res.status(200).send("Supprimé")
-};
 
 // module.exports.postConnectionLogsController = postConnectionLogsController;
-module.exports.getSingleConnectionLogsController = getSingleConnectionLogsController;
 module.exports.getMultipleConnectionLogsController = getMultipleConnectionLogsController;
-module.exports.deleteConnectionLogsController = deleteConnectionLogsController;
 module.exports.postComponentsLogsController = postComponentsLogsController;
-module.exports.getSingleComponentsLogsController = getSingleComponentsLogsController;
 module.exports.getMultipleComponentsLogsController = getMultipleComponentsLogsController;
-module.exports.deleteComponentsLogsController = deleteComponentsLogsController;

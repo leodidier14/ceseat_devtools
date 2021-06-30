@@ -26,8 +26,9 @@ router.get('/logs/connection', async function(req, res){
 });
 
 //Components Logs
-router.post('/logs/components/logs', async function(req, res){
+router.post('/logs/components/', async function(req, res){
     const tokenapp = req.headers['tokenapp'];
+    console.log(req.headers)
     checkTokenApp = await verifTokenAppController(tokenapp)
     if (checkTokenApp == null) return res.status(200).send("La requête ne peux venir que de la gateway")
     postComponentsLogsController(req, res)
@@ -50,6 +51,9 @@ router.post('/components', async function(req, res){
 router.get('/components/', async function(req, res){
     const tokenapp = req.headers['tokenapp'];
     checkTokenApp = await verifTokenAppController(tokenapp)
+    console.log(req.headers)
+
+
     if (checkTokenApp == null) return res.status(200).send("La requête ne peux venir que de la gateway")
     getComponentsController(req, res)
 });
