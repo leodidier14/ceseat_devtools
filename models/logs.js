@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 
 const logsSchema = new Schema({
     idUser : Number,
+    type: String,
     time : String,
     state: String
 });
