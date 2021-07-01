@@ -8,9 +8,9 @@ const { verifTokenAppController } = require('./controllers/tokenAppController')
 const requestLog = require('./models/requestLog')
 const route = '/api/devtools/'
 //Connect to db
-mongoose.connect(process.env.DB_MONGO_CONNECT, {useNewUrlParser: true}, () =>
+mongoose.connect(process.env.DB_MONGO_CONNECT, {useNewUrlParser: true, useUnifiedTopology:true}, () =>
     console.log("connected to database")
-);
+)
 
 //######### Display name and version ############// 
 const apiinf = require('./models/apiinfo')
