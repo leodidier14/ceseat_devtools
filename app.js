@@ -1,41 +1,47 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express')
+const app = express()
+// const dotenv = require('dotenv');
+const path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '.env') })
+const mongoose = require('mongoose');
+const { verifTokenAppController } = require('./controllers/tokenAppController')
+const requestLog = require('./models/requestLog')
+const route = '/api/devtools/'
+//Connect to db
+mongoose.connect(process.env.DB_MONGO_CONNECT, {useNewUrlParser: true, useUnifiedTopology:true}, () =>
+    console.log("connected to database")
+)
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//######### Display name and version ############// 
+const apiinf = require('./models/apiinfo')
+var pjson = require('./package.json');
+console.log("name : " + pjson.name);
+console.log("version : " + pjson.version);
+const apiinfos = apiinf.findOneAndUpdate({name: pjson.name, port: process.env.PORT,path:route}, {version : pjson.version}, {upsert: true}).exec()
+//################################################//
 
-var app = express();
+//Import routes
+const authRoute = require('./routes/routes')
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.use(async(req,res,next) => {
+  const tokenapp = req.headers['tokenapp'];
+  checkTokenApp = await verifTokenAppController(tokenapp) 
+  if(checkTokenApp || req.originalUrl.includes('available'))
+    next()
+  else 
+    res.status(400).send('not an authentified APP ')
+})
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use((req,res,next) => {
+  requestLog.create({name:pjson.name,date: Date.now()}, (err)=> {
+    if(err) console.log(err)
+  })
+  next()
+})
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//Route middlewares
+app.use(route, authRoute)
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
+//Running server and listening on port 3000
+const PORT = process.env.PORT
+app.listen(PORT, () => console.log(`Serveur running on port ${PORT}`))
